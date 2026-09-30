@@ -1,9 +1,22 @@
-This is a major release of ggplot2. Among other things it includes an adaption
-of S7 for all the S3 classes and methods that were currently in use.
-Unfortunately such a change is not without issue with the number of reverse
-dependencies that ggplot2 has as many packages wrongfully checks the internals
-of ggplot2 objects in their tests.
+This is a patch release that resolves a failing test and supports some minimal
+bug fixes and a small uninvasive feature. We detected a single failure
+(ggdibbler) where a package needs to redocument. They have been notified. A
+second failure (simRestore) seems unrelated to ggplot2
 
-Because of this you should expect a larger than usual number of breaking
-packages. We have been very diligent to reach out to all maintainers over the
-last 2-3 months and provided resolutions but breakages are still to be expected.
+## revdepcheck results
+
+We checked 6300 reverse dependencies (6276 from CRAN + 24 from Bioconductor), comparing R CMD check results across CRAN and dev versions of this package.
+
+ * We saw 2 new problems
+ * We failed to check 160 packages
+
+Issues with CRAN packages are summarised below.
+
+### New problems
+(This reports the first line of each new failure)
+
+* ggdibbler
+  checking for code/documentation mismatches ... WARNING
+
+* simRestore
+  checking tests ... ERROR

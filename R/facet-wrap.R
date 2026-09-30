@@ -28,19 +28,30 @@ NULL
 #'   the plot. Using `strip.position` it is possible to place the labels on
 #'   either of the four sides by setting \code{strip.position = c("top",
 #'   "bottom", "left", "right")}
-#' @param dir Direction: either `"h"` for horizontal, the default, or `"v"`,
-#'   for vertical. When `"h"` or `"v"` will be combined with `as.table` to
-#'   set final layout. Alternatively, a combination of `"t"` (top) or
-#'   `"b"` (bottom) with `"l"` (left) or `"r"` (right) to set a layout directly.
-#'   These two letters give the starting position and the first letter gives
-#'   the growing direction. For example `"rt"` will place the first panel in
-#'   the top-right and starts filling in panels right-to-left.
+#' @param dir Direction in which panels are laid out. Must be one of
+#'   the following two-letter codes, where the first letter indicates
+#'   the initial fill direction and the pair identifies the starting
+#'   corner:
+#'
+#'   * `"lt"`: start in the top-left, fill left-to-right.
+#'   * `"tl"`: start in the top-left, fill top-to-bottom.
+#'   * `"lb"`: start in the bottom-left, fill left-to-right.
+#'   * `"bl"`: start in the bottom-left, fill bottom-to-top.
+#'   * `"rt"`: start in the top-right, fill right-to-left.
+#'   * `"tr"`: start in the top-right, fill top-to-bottom.
+#'   * `"rb"`: start in the bottom-right, fill right-to-left.
+#'   * `"br"`: start in the bottom-right, fill bottom-to-top.
+#'
+#'   Use `nrow` or `ncol` to control the shape of the grid; `dir`
+#'   controls the fill order within that shape. The shorthand values
+#'   `"h"` and `"v"` are superseded and retained only for backward
+#'   compatibility.
 #' @param axes Determines which axes will be drawn in case of fixed scales.
 #'   When `"margins"` (default), axes will be drawn at the exterior margins.
 #'   `"all_x"` and `"all_y"` will draw the respective axes at the interior
 #'   panels too, whereas `"all"` will draw all axes at all panels.
 #' @param axis.labels Determines whether to draw labels for interior axes when
-#'   the scale is fixed and the `axis` argument is not `"margins"`. When
+#'   the scale is fixed and the `axes` argument is not `"margins"`. When
 #'   `"all"` (default), all interior axes get labels. When `"margins"`, only
 #'   the exterior axes get labels, and the interior axes get none. When
 #'   `"all_x"` or `"all_y"`, only draws the labels at the interior axes in the
@@ -194,7 +205,7 @@ facet_wrap <- function(facets, nrow = NULL, ncol = NULL, scales = "fixed",
   facets <- compact_facets(facets)
 
   if (lifecycle::is_present(switch) && !is.null(switch)) {
-    lifecycle::deprecate_stop(
+    deprecate(
       "2.2.0", "facet_wrap(switch)", "facet_wrap(strip.position)"
     )
   }
@@ -568,7 +579,7 @@ wrap_layout <- function(id, dims, dir) {
   if (nchar(dir) != 2) {
     # Should only occur when `as.table` was not incorporated into `dir`
     dir <- switch(dir, h = "lt", v = "tl")
-    deprecate_soft0(
+    deprecate(
       "4.0.0",
       what = I("Internal use of `dir = \"h\"` and `dir = \"v\"` in `facet_wrap()`"),
       details = I(c(
